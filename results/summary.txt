@@ -1,0 +1,38 @@
+==================================================================
+BLACK-SCHOLES ACCURACY ON REAL NIFTY50 OPTIONS  (black-76 form)
+==================================================================
+data: 60 days (2024-01-01 to 2024-03-28), 43,817 quotes, 20 expiries.
+forward 21193-22970; strikes 14000-27000; rate 6.90%.
+
+(1) accuracy by volatility input  [errors in Rs.]
+------------------------------------------------------------------
+   model     n      RMSE    RMSE_95CI       MAE    MAPE_%  MeanSignedErr       R2
+realized 43817 50.770998 [50.0, 51.5] 30.778397 37.480939      -9.269736 0.995966
+    ewma 43817 40.451520 [39.7, 41.3] 23.555941 33.106561      -8.795672 0.997439
+   garch 43817 39.474533 [38.7, 40.3] 23.432464 33.757439     -10.029721 0.997561
+
+(2) smile-fitted benchmark vs plain flat-vol BS
+------------------------------------------------------------------
+  flat-vol BS (realized): RMSE=50.77  MAPE=37.5%  R2=0.996
+  smile-fitted          : RMSE=30.19  MAPE=28.3%  R2=0.999
+  -> fitting the smile drops RMSE 41%, so the flat-vol assumption is the real problem, not the formula.
+
+(3) smile shape  (iv = a + b*x + c*x^2 per expiry)
+------------------------------------------------------------------
+  median skew  b = -0.211  (negative = the usual equity skew)
+  median curve c = +3.487  (positive = smile BS can't match)
+
+(4) error by moneyness  (using realized vol)
+------------------------------------------------------------------
+moneyness     n      RMSE       MAE    MAPE_%  MeanSignedErr       R2
+      ATM  6190 60.422354 44.297569 15.348091     -17.766688 0.828317
+      ITM 13569 63.613966 40.417426  4.291596      -3.884151 0.996311
+      OTM 24058 38.379896 21.863456 61.894795     -10.121048 0.823489
+
+(5) error by time to expiry
+------------------------------------------------------------------
+expiry_b     n      RMSE       MAE    MAPE_%  MeanSignedErr       R2
+  31-60d  8594 63.209242 47.127493 27.846094     -10.308025 0.994786
+   8-30d 21302 38.274144 24.487605 37.827088      -8.064686 0.997056
+    <=7d  9463 30.942845 12.037854 50.161577      -1.541856 0.998231
+    >60d  4458 92.742879 69.101432 27.483476     -29.430313 0.992623
