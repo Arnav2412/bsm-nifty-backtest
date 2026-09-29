@@ -24,7 +24,7 @@ python src/generate_report.py    # build the PDF report
 python -m pytest -q              # (optional) run the tests — 9 should pass
 ```
 The results are already generated and committed, so you can also just open
-`results/` directly without running anything.
+`results/` directly without anything.
 
 ## What to look at
 | File | What it is |
